@@ -1,0 +1,134 @@
+<?php
+
+/*
+ * This file is part of the Mall Digital Ecosystem (MDE) project.
+ *
+ * (c) <SCCD> <office@sccd.lu>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+namespace Scc\Cdn;
+use Scc\Cdn\Builder\UrlBuilder;
+use Scc\Cdn\Decorator\HTMLDecorator;
+use Scc\Cdn\Exception\MissingOptionException;
+use Scc\Cdn\Transformation\TransformationManager;
+
+/**
+ * Class Client
+ *
+ * The CDN client class
+ *
+ * @author Jason Benedetti <jason.benedetti@sccd.lu>
+ */
+class Client
+{
+    /**
+     * The media path
+     *
+     * @var string
+     */
+    protected $mediaPath;
+
+    /**
+     * The CDN secret api key
+     *
+     * @var string
+     */
+    protected $apiSecret;
+
+    /**
+     * The CDN secret api key
+     *
+     * @var string
+     */
+    protected $baseUrl;
+
+    /**
+     * The url builder
+     *
+     * @var UrlBuilder
+     */
+    protected $urlBuilder;
+
+    /**
+     * The transformation manager
+     *
+     * @var TransformationManager
+     */
+    protected $transformationManager;
+
+    /**
+     * Build an instance of Client.
+     *
+     * @param string $apiSecret
+     * @param string $baseUrl
+     */
+    public function __construct($apiSecret, $baseUrl)
+    {
+        $this->apiSecret = $apiSecret;
+        $this->urlBuilder = new UrlBuilder($baseUrl);
+        $this->transformationManager = new TransformationManager();
+    }
+
+    /**
+     * Get the resource url decorated into an HTML element
+     *
+     * Be careful, this method is deprecated and will be removed soon. Please use getUrl instead
+     *
+     * @param string $path
+     * @param array  $options
+     *
+     * @return string
+     *
+     * @deprecated
+     */
+    public function getTaggedUrl($path, array $options)
+    {
+        return (new HTMLDecorator($this->getUrl($path, $options)))
+            ->decorate($options['resource_type'], $this->transformationManager->getAttributes());
+    }
+
+    /**
+     * Get the resource url
+     *
+     * @param string $path
+     * @param array  $options
+     *
+     * @return string
+     */
+    public function getUrl($path, array $options)
+    {
+        $this->resolveOptions($options);
+
+        $transformations = $this->transformationManager
+            ->resolveTransformations($options['resource_type'], $options)
+            ->stringifyTransformations($options);
+
+        $this->urlBuilder
+            ->addUrlPart(0, $options['resource_type'])
+            ->addUrlPart(1, 'upload')
+            ->addUrlPart(4, $path);
+
+        if (!empty($transformations)) {
+            $this->urlBuilder
+                ->addUrlPart(2, (new Sign($this->apiSecret))->generate($transformations, $path))
+                ->addUrlPart(3, $transformations);
+        }
+
+        return $this->urlBuilder->build();
+    }
+
+    /**
+     * Resolve the options
+     *
+     * @throws MissingOptionException if a required option is missing
+     */
+    protected function resolveOptions(array $options)
+    {
+        if (!isset($options['resource_type'])) {
+            throw new MissingOptionException('resource_type');
+        }
+    }
+}

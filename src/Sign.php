@@ -13,28 +13,35 @@ namespace Scc\Cdn;
 
 class Sign
 {
-
-    /** @var string */
+    /**
+     * The API secret
+     *
+     * @var string
+     */
     private $apiSecret;
 
+    /**
+     * Build an instance of Sign.
+     *
+     * @param string $api_secret
+     */
     public function __construct($api_secret)
     {
         $this->apiSecret = $api_secret;
     }
 
     /**
-     * @param array $transformation
+     * Generate the transformation
+     *
+     * @param string $transformation
      * @param string $source
      *
      * @return string
      */
-    public function generate(array $transformation, $source)
+    public function generate($transformation, $source)
     {
-
         $to_sign = implode('/', array_filter(array($transformation, $source)));
-        $signature = str_replace(array('+', '/', '='), array('-', '_', ''), base64_encode(sha1($to_sign . $this->apiSecret, TRUE)));
+        $signature = sha1($to_sign . $this->apiSecret);
         return 's--' . substr($signature, 0, 8) . '--';
-     
-
     }
 }
