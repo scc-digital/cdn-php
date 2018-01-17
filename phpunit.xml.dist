@@ -17,7 +17,7 @@
     </php>
 
     <testsuites>
-        <testsuite name="PWGen\Password Test Suite">
+        <testsuite name="CDN Client Test Suite">
             <directory>tests</directory>
         </testsuite>
 
