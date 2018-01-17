@@ -112,9 +112,10 @@ class Client
             ->resolveTransformations($options['resource_type'], $options)
             ->stringifyTransformations($options);
 
+        $this->urlBuilder->addUrlPart(0, $this->urlBuilder->getBasePath());
+
         if (!empty($transformations)) {
             $this->urlBuilder
-                ->addUrlPart(0, $this->urlBuilder->getBasePath())
                 ->addUrlPart(1, $options['resource_type'])
                 ->addUrlPart(2, $pathType)
                 ->addUrlPart(4, (new Sign($this->apiSecret))->generate($transformations, $path))
@@ -122,12 +123,9 @@ class Client
                 ->addUrlPart(255, $this->buildPath($path, $pathType));
         } else {
             if ($pathType === UrlBuilder::PATH_TYPE_UPLOAD) {
-                $this->urlBuilder
-                    ->addUrlPart(0, $this->urlBuilder->getBasePath())
-                    ->addUrlPart(255, $path);
+                $this->urlBuilder->addUrlPart(255, $path);
             } else {
-                $this->urlBuilder
-                    ->addUrlPart(0, $path);
+                $this->urlBuilder->replaceUrlPart(0, $path);
             }
         }
 
@@ -180,9 +178,11 @@ class Client
     /**
      * Resolve the options
      *
+     * @param array $options
+     *
      * @throws MissingOptionException if a required option is missing
      */
-    protected function resolveOptions(array $options)
+    protected function resolveOptions(array &$options)
     {
         if (!isset($options['resource_type'])) {
             throw new MissingOptionException('resource_type');

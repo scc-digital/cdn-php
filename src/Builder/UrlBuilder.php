@@ -67,6 +67,21 @@ class UrlBuilder
     }
 
     /**
+     * Add an url part on the given position even if already set
+     *
+     * @param int    $position
+     * @param string $urlPart
+     *
+     * @return $this
+     */
+    public function replaceUrlPart($position, $urlPart)
+    {
+        $this->urlParts[$position] = $urlPart;
+
+        return $this;
+    }
+
+    /**
      * Get the base path
      *
      * @return string
