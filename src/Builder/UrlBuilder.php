@@ -20,6 +20,9 @@ namespace Scc\Cdn\Builder;
  */
 class UrlBuilder
 {
+    const PATH_TYPE_REMOTE = 'remote';
+    const PATH_TYPE_UPLOAD = 'upload';
+
     /**
      * The url base path
      *
@@ -97,56 +100,10 @@ class UrlBuilder
         ksort($this->urlParts);
 
         $url = [];
-        $url[] = $this->trimSlashes($this->basePath);
         foreach ($this->urlParts as $urlPart) {
-            $url[] = $this->trimSlashes($urlPart);
+            $url[] = trim($urlPart, '/');
         }
 
         return implode('/', $url);
-    }
-
-    protected function trimSlashes($value)
-    {
-        if (DIRECTORY_SEPARATOR === substr($value, -1)) {
-            $value = substr($value, 0, -1);
-        }
-
-        if (DIRECTORY_SEPARATOR === substr($value, 0, 1)) {
-            $value = substr($value, 0, 1);
-        }
-
-        return $value;
-    }
-
-    /**
-     * Remove the last slash of the value
-     *
-     * @param string $value
-     *
-     * @return string
-     */
-    protected function removeLastSlash($value)
-    {
-        if (DIRECTORY_SEPARATOR === substr($value, -1)) {
-            return substr($value, 0, -1);
-        }
-
-        return $value;
-    }
-
-    /**
-     * Add a slash in the beginning of the value
-     *
-     * @param string $value
-     *
-     * @return string
-     */
-    protected function addFirstSlash($value)
-    {
-        if (DIRECTORY_SEPARATOR !== substr($value, 0, 1)) {
-            return $value . DIRECTORY_SEPARATOR;
-        }
-
-        return $value;
     }
 }

@@ -102,22 +102,79 @@ class Client
     {
         $this->resolveOptions($options);
 
+        $pathType = filter_var($path, FILTER_VALIDATE_URL) ? UrlBuilder::PATH_TYPE_REMOTE : UrlBuilder::PATH_TYPE_UPLOAD;
+
+        if (empty($path)) {
+            return '';
+        }
+
         $transformations = $this->transformationManager
             ->resolveTransformations($options['resource_type'], $options)
             ->stringifyTransformations($options);
 
-        $this->urlBuilder
-            ->addUrlPart(0, $options['resource_type'])
-            ->addUrlPart(1, 'upload')
-            ->addUrlPart(4, $path);
-
         if (!empty($transformations)) {
             $this->urlBuilder
-                ->addUrlPart(2, (new Sign($this->apiSecret))->generate($transformations, $path))
-                ->addUrlPart(3, $transformations);
+                ->addUrlPart(0, $this->urlBuilder->getBasePath())
+                ->addUrlPart(1, $options['resource_type'])
+                ->addUrlPart(2, $pathType)
+                ->addUrlPart(4, (new Sign($this->apiSecret))->generate($transformations, $path))
+                ->addUrlPart(8, $transformations)
+                ->addUrlPart(255, $this->buildPath($path, $pathType));
+        } else {
+            if ($pathType === UrlBuilder::PATH_TYPE_UPLOAD) {
+                $this->urlBuilder
+                    ->addUrlPart(0, $this->urlBuilder->getBasePath())
+                    ->addUrlPart(255, $path);
+            } else {
+                $this->urlBuilder
+                    ->addUrlPart(0, $path);
+            }
         }
 
         return $this->urlBuilder->build();
+    }
+
+    /**
+     * Guess the path extension based on the given path
+     *
+     * @param string $path
+     *
+     * @return string
+     */
+    protected function guessPathExtension($path)
+    {
+        $url = parse_url($path);
+        $urlParts = explode('.', $url['path']);
+
+        $extension = end($urlParts);
+
+        if ($extension === $url['path']) {
+            $contentType = explode('/', mime_content_type($path));
+            $extension = $contentType[1];
+        }
+
+        return $extension;
+    }
+
+    /**
+     * Build the path
+     *
+     * @param string $path
+     * @param string $pathType
+     *
+     * @return string
+     */
+    protected function buildPath($path, $pathType)
+    {
+        if ($pathType === UrlBuilder::PATH_TYPE_REMOTE) {
+            try {
+                return base64_encode($path) . '.' . $this->guessPathExtension($path);
+            } catch (\Exception $exception) {
+                return base64_encode($path);
+            }
+        }
+
+        return $path;
     }
 
     /**
