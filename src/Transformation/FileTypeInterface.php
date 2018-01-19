@@ -9,19 +9,16 @@
  * file that was distributed with this source code.
  */
 
-namespace Scc\Cdn\Transformation\Type;
-
-use Scc\Cdn\Transformation\ImageTypeInterface;
-use Scc\Cdn\Transformation\VideoTypeInterface;
+namespace Scc\Cdn\Transformation;
 
 /**
- * Class Width
+ * Interface FileTypeInterface
  *
- * The weight transformation
+ * Implemented by all the transformations available for the file resource type
  *
  * @author Jason Benedetti <jason.benedetti@sccd.lu>
  */
-class Width extends AbstractType implements ImageTypeInterface, VideoTypeInterface
+interface FileTypeInterface extends TransformationInterface
 {
-    const TRANSFORMATION_NAME = 'width';
+
 }

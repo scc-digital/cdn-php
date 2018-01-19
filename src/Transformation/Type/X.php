@@ -14,21 +14,13 @@ namespace Scc\Cdn\Transformation\Type;
 use Scc\Cdn\Transformation\ImageTypeInterface;
 
 /**
- * Class Border
+ * Class CoordX
  *
- * The border transformation
+ * The x transformation
  *
  * @author Jason Benedetti <jason.benedetti@sccd.lu>
  */
-class Border extends AbstractType implements ImageTypeInterface
+class X extends AbstractType implements ImageTypeInterface
 {
-    const TRANSFORMATION_NAME = 'border';
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getAlias()
-    {
-        return 'bo';
-    }
+    const TRANSFORMATION_NAME = 'x';
 }

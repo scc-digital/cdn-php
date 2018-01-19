@@ -11,6 +11,9 @@
 
 namespace Scc\Cdn\Transformation\Type;
 
+use Scc\Cdn\Transformation\ImageTypeInterface;
+use Scc\Cdn\Transformation\VideoTypeInterface;
+
 /**
  * Class Quality
  *
@@ -18,7 +21,7 @@ namespace Scc\Cdn\Transformation\Type;
  *
  * @author Jason Benedetti <jason.benedetti@sccd.lu>
  */
-class Quality extends AbstractType
+class Quality extends AbstractType implements ImageTypeInterface, VideoTypeInterface
 {
     const TRANSFORMATION_NAME = 'quality';
 }

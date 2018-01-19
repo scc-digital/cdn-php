@@ -25,6 +25,12 @@ class TransformationManager
 {
     const TRANSFORMATIONS_SEPARATOR = ',';
 
+    const RESOURCES_TYPES = [
+        'image' => ImageTypeInterface::class,
+        'video' => VideoTypeInterface::class,
+        'file' => FileTypeInterface::class
+    ];
+
     /**
      * The pool of transformations
      *
@@ -70,6 +76,18 @@ class TransformationManager
     }
 
     /**
+     * Convert a string from snake case to camel case
+     *
+     * @param string $string
+     *
+     * @return string
+     */
+    protected function dashesToCamelCase($string)
+    {
+        return str_replace('_', '', ucwords($string, '_'));
+    }
+
+    /**
      * Resolve the transformations and validate if accessible
      *
      * @param string $resourceType
@@ -82,22 +100,18 @@ class TransformationManager
         $this->validate($resourceType);
         $this->initPool();
 
-        $availableTransformations = TransformationConfig::getConfiguration($resourceType);
+        foreach ($options as $key => $value) {
+            $className = 'Scc\\Cdn\\Transformation\\Type\\' . $this->dashesToCamelCase($key);
 
-        foreach ($availableTransformations as $transformationClass) {
-            /** @var TransformationInterface $transformation */
-            $transformation = new $transformationClass();
-
-            if (in_array($transformation->getName(), array_keys($options))) {
-                $this->pool->addTransformation($transformation);
-                unset($options[$transformation->getName()]);
+            if (!class_exists($className)) {
+                $this->attributes[$key] = $value;
                 continue;
             }
 
-            unset($transformation);
+            if (is_subclass_of($className, static::RESOURCES_TYPES[$resourceType])) {
+                $this->pool->addTransformation(new $className());
+            }
         }
-
-        $this->attributes = $options;
 
         return $this;
     }
@@ -127,10 +141,16 @@ class TransformationManager
     /**
      * Validation
      *
-     * @param       $resourceType
+     * @param string $resourceType
      */
     protected function validate($resourceType)
     {
-        ResourceTypeValidator::validate($resourceType);
+        if (!isset(static::RESOURCES_TYPES[$resourceType])) {
+            throw new \InvalidArgumentException(sprintf(
+                'The "%s" resource type is not valid. Valid values are "%s"',
+                $resourceType,
+                implode(', ', array_keys(static::RESOURCES_TYPES))
+            ));
+        }
     }
 }

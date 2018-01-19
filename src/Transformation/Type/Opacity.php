@@ -11,6 +11,8 @@
 
 namespace Scc\Cdn\Transformation\Type;
 
+use Scc\Cdn\Transformation\ImageTypeInterface;
+
 /**
  * Class Opacity
  *
@@ -18,7 +20,7 @@ namespace Scc\Cdn\Transformation\Type;
  *
  * @author Jason Benedetti <jason.benedetti@sccd.lu>
  */
-class Opacity extends AbstractType
+class Opacity extends AbstractType implements ImageTypeInterface
 {
     const TRANSFORMATION_NAME = 'opacity';
 }

@@ -11,6 +11,9 @@
 
 namespace Scc\Cdn\Transformation\Type;
 
+use Scc\Cdn\Transformation\ImageTypeInterface;
+use Scc\Cdn\Transformation\VideoTypeInterface;
+
 /**
  * Class Height
  *
@@ -18,7 +21,7 @@ namespace Scc\Cdn\Transformation\Type;
  *
  * @author Jason Benedetti <jason.benedetti@sccd.lu>
  */
-class Height extends AbstractType
+class Height extends AbstractType implements ImageTypeInterface, VideoTypeInterface
 {
     const TRANSFORMATION_NAME = 'height';
 }

@@ -9,16 +9,15 @@
  * file that was distributed with this source code.
  */
 
-namespace Scc\Cdn\Transformation\Type;
+namespace Scc\Cdn\Transformation;
 
 /**
- * Class CoordX
+ * Interface ImageTypeInterface
  *
- * The x transformation
+ * Implemented by all the transformations available for the image resource type
  *
  * @author Jason Benedetti <jason.benedetti@sccd.lu>
  */
-class CoordX extends AbstractType
+interface ImageTypeInterface extends TransformationInterface
 {
-    const TRANSFORMATION_NAME = 'x';
 }

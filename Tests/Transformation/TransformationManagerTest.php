@@ -86,11 +86,11 @@ class TransformationManagerTest extends \PHPUnit_Framework_TestCase
         $pool = $this->getProperty($this->instance, 'pool');
         $this->assertInstanceOf(TransformationPool::class, $pool);
 
-        $this->assertEmpty($pool);
-
         if (!$pool instanceof \Countable) {
             $this->fail(sprintf('The "%s" class must be an instance of %s', TransformationPool::class, \Countable::class));
         }
+
+        $this->assertEmpty($pool);
     }
 
     /**
@@ -229,7 +229,10 @@ class TransformationManagerTest extends \PHPUnit_Framework_TestCase
 
         foreach ($expectedTransformations as $transformationClass) {
             $class = new $transformationClass();
+            $interface = 'Scc\\Cdn\\Transformation\\' . ucfirst($resourceType) . 'TypeInterface';
+
             $this->assertInstanceOf(TransformationInterface::class, $pool->getTransformationByName($class->getName()));
+            $this->assertInstanceOf($interface, $pool->getTransformationByName($class->getName()));
         }
     }
 }

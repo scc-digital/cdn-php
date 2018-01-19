@@ -97,6 +97,11 @@ class TransformationPoolTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($storage, $this->instance->getTransformations());
     }
 
+    /**
+     * Get some test transformations
+     *
+     * @return array
+     */
     public function provideTransformations()
     {
         return [
@@ -140,11 +145,18 @@ class TransformationPoolTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    public function testAddTransformation()
+    /**
+     * Test the TransformationPool::addTransformation, removeTransformation and count methods
+     */
+    public function testAddAndRemoveAndCountTransformation()
     {
+        if (!$this->instance instanceof \Countable) {
+            $this->fail(sprintf('The "%s" class must be an instance of %s', TransformationPool::class, \Countable::class));
+        }
+
         $width = new Width();
         $color = new Color();
-        //$fakeWidth = new \Scc\Cdn\Tests\Transformation\Type\TypeStub('width');
+        $fakeWidth = new Width();
 
         $transformations = $this->getProperty($this->instance, 'transformations');
 
@@ -159,10 +171,13 @@ class TransformationPoolTest extends \PHPUnit_Framework_TestCase
         $this->assertContains($width, $transformations);
         $this->assertContains($color, $transformations);
 
-        /*$this->assertSame($this->instance, $this->instance->addTransformation($fakeWidth));
+        $this->assertSame($this->instance, $this->instance->addTransformation($fakeWidth));
         $this->assertEquals(2, count($transformations));
         $this->assertContains($width, $transformations);
         $this->assertContains($color, $transformations);
-        $this->assertNotContains($fakeWidth, $transformations);*/
+        $this->assertNotContains($fakeWidth, $transformations);
+
+        $this->assertSame($this->instance, $this->instance->removeTransformation($color));
+        $this->assertContainsOnly($width, $transformations);
     }
 }

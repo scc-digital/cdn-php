@@ -122,11 +122,9 @@ class Client
                 ->addUrlPart(8, $transformations)
                 ->addUrlPart(255, $this->buildPath($path, $pathType));
         } else {
-            if ($pathType === UrlBuilder::PATH_TYPE_UPLOAD) {
-                $urlBuilder->addUrlPart(255, $path);
-            } else {
-                $urlBuilder->replaceUrlPart(0, $path);
-            }
+            $pathType === UrlBuilder::PATH_TYPE_UPLOAD
+                ? $urlBuilder->addUrlPart(255, $path)
+                : $urlBuilder->replaceUrlPart(0, $path);
         }
 
         return $urlBuilder->build();

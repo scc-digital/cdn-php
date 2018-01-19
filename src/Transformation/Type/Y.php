@@ -9,21 +9,18 @@
  * file that was distributed with this source code.
  */
 
-namespace Scc\Cdn\Validator;
+namespace Scc\Cdn\Transformation\Type;
+
+use Scc\Cdn\Transformation\ImageTypeInterface;
 
 /**
- * Interface ValidatorInterface
+ * Class CoordY
  *
- * Implemented by the validators
+ * The y transformation
  *
  * @author Jason Benedetti <jason.benedetti@sccd.lu>
  */
-interface ValidatorInterface
+class Y extends AbstractType implements ImageTypeInterface
 {
-    /**
-     * Validate the given value or throw an exception
-     *
-     * @param mixed $value
-     */
-    public static function validate($value);
+    const TRANSFORMATION_NAME = 'y';
 }

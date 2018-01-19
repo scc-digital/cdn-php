@@ -9,16 +9,15 @@
  * file that was distributed with this source code.
  */
 
-namespace Scc\Cdn\Transformation\Type;
+namespace Scc\Cdn\Transformation;
 
 /**
- * Class CoordY
+ * Interface VideoTypeInterface
  *
- * The y transformation
+ * Implemented by all the transformations available for the video resource type
  *
  * @author Jason Benedetti <jason.benedetti@sccd.lu>
  */
-class CoordY extends AbstractType
+interface VideoTypeInterface extends TransformationInterface
 {
-    const TRANSFORMATION_NAME = 'y';
 }

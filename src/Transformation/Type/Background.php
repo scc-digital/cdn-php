@@ -11,6 +11,8 @@
 
 namespace Scc\Cdn\Transformation\Type;
 
+use Scc\Cdn\Transformation\ImageTypeInterface;
+
 /**
  * Class Background
  *
@@ -18,7 +20,7 @@ namespace Scc\Cdn\Transformation\Type;
  *
  * @author Jason Benedetti <jason.benedetti@sccd.lu>
  */
-class Background extends AbstractType
+class Background extends AbstractType implements ImageTypeInterface
 {
     const TRANSFORMATION_NAME = 'background';
 }

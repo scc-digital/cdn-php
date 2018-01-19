@@ -10,7 +10,6 @@
  */
 
 namespace Scc\Cdn\Decorator;
-use Scc\Cdn\Transformation\Config\TransformationConfig;
 
 /**
  * Class HTMLDecorator
@@ -82,13 +81,11 @@ class HTMLDecorator
      */
     protected function getHTMLContent($resourceType)
     {
-        $resourceTypes = TransformationConfig::getResourcesTypes();
-
         switch ($resourceType) {
-            case $resourceTypes['image']:
+            case 'image':
                 return '<img src="%s" %s />';
                 break;
-            case $resourceTypes['video']:
+            case 'video':
                 return '<video src="%s" %s />';
                 break;
             default:
