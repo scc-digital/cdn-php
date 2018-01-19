@@ -68,7 +68,7 @@ class Client
     public function __construct($apiSecret, $baseUrl)
     {
         $this->apiSecret = $apiSecret;
-        $this->urlBuilder = new UrlBuilder($baseUrl);
+        $this->baseUrl = $baseUrl;
         $this->transformationManager = new TransformationManager();
     }
 
@@ -112,24 +112,24 @@ class Client
             ->resolveTransformations($options['resource_type'], $options)
             ->stringifyTransformations($options);
 
-        $this->urlBuilder->addUrlPart(0, $this->urlBuilder->getBasePath());
+        $urlBuilder = new UrlBuilder($this->baseUrl);
+        $urlBuilder->addUrlPart(0, $urlBuilder->getBasePath());
 
         if (!empty($transformations)) {
-            $this->urlBuilder
-                ->addUrlPart(1, $options['resource_type'])
+            $urlBuilder->addUrlPart(1, $options['resource_type'])
                 ->addUrlPart(2, $pathType)
                 ->addUrlPart(4, (new Sign($this->apiSecret))->generate($transformations, $path))
                 ->addUrlPart(8, $transformations)
                 ->addUrlPart(255, $this->buildPath($path, $pathType));
         } else {
             if ($pathType === UrlBuilder::PATH_TYPE_UPLOAD) {
-                $this->urlBuilder->addUrlPart(255, $path);
+                $urlBuilder->addUrlPart(255, $path);
             } else {
-                $this->urlBuilder->replaceUrlPart(0, $path);
+                $urlBuilder->replaceUrlPart(0, $path);
             }
         }
 
-        return $this->urlBuilder->build();
+        return $urlBuilder->build();
     }
 
     /**

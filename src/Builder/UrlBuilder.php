@@ -57,7 +57,7 @@ class UrlBuilder
      */
     public function addUrlPart($position, $urlPart)
     {
-        if (isset($this->urlPart[$position])) {
+        if (isset($this->urlParts[$position])) {
             throw new \RuntimeException(sprintf('The position %s is already attributed to an url part', $position));
         }
 

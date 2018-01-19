@@ -19,7 +19,7 @@ use Scc\Cdn\Transformation\Exception\UnsupportedException;
  *
  * @author Jason Benedetti <jason.benedetti@sccd.lu>
  */
-class TransformationPool
+class TransformationPool implements \Countable
 {
     /**
      * @var \SplObjectStorage
@@ -121,5 +121,13 @@ class TransformationPool
         }
 
         return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function count()
+    {
+        return count($this->transformations);
     }
 }

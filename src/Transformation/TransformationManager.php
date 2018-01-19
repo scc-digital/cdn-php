@@ -14,6 +14,13 @@ namespace Scc\Cdn\Transformation;
 use Scc\Cdn\Transformation\Config\TransformationConfig;
 use Scc\Cdn\Validator\ResourceTypeValidator;
 
+/**
+ * Class TransformationManager
+ *
+ * Handle the business process of the transformations
+ *
+ * @author Jason Benedetti <jason.benedetti@sccd.lu>
+ */
 class TransformationManager
 {
     const TRANSFORMATIONS_SEPARATOR = ',';
@@ -42,10 +49,14 @@ class TransformationManager
 
     /**
      * Init the pool
+     *
+     * @return $this
      */
     public function initPool()
     {
         $this->pool = new TransformationPool();
+
+        return $this;
     }
 
     /**
@@ -68,7 +79,7 @@ class TransformationManager
      */
     public function resolveTransformations($resourceType, array $options)
     {
-        $this->validate($resourceType, $options);
+        $this->validate($resourceType);
         $this->initPool();
 
         $availableTransformations = TransformationConfig::getConfiguration($resourceType);
@@ -108,6 +119,8 @@ class TransformationManager
             }
         }
 
+        sort($strings);
+
         return implode(static::TRANSFORMATIONS_SEPARATOR, $strings);
     }
 
@@ -115,9 +128,8 @@ class TransformationManager
      * Validation
      *
      * @param       $resourceType
-     * @param array $options
      */
-    protected function validate($resourceType, array $options)
+    protected function validate($resourceType)
     {
         ResourceTypeValidator::validate($resourceType);
     }

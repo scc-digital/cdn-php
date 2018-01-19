@@ -33,7 +33,7 @@ class ResourceTypeValidator implements ValidatorInterface
             throw new \InvalidArgumentException(sprintf(
                 'The "%s" resource type is not valid. Valid values are "%s"',
                 $value,
-                implode(', ', TransformationConfig::RESOURCES_TYPES)
+                implode(', ', TransformationConfig::getResourcesTypes())
             ));
         }
     }

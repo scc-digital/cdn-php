@@ -14,24 +14,34 @@ namespace Scc\Cdn\Tests;
 
 use Scc\Cdn\Sign;
 
-class SignTest   extends \PHPUnit_Framework_TestCase
+/**
+ * Class SignTest
+ *
+ * @author Jerôme Fix <jerome.fix@sccd.lu>
+ */
+class SignTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
+     * Test the generate function
+     *
      * @dataProvider providerGenerate
      */
-    public function testGenerate($api_secret, $transformations, $source,  $expected )
+    public function testGenerate($apiSecret, $transformations, $source, $expected)
     {
-
-        $sign = new Sign($api_secret);
+        $sign = new Sign($apiSecret);
         self::assertSame($expected, $sign->generate($transformations, $source));
 
     }
 
-
-    public function providerGenerate () {
+    /**
+     * Data provider
+     *
+     * @return array
+     */
+    public function providerGenerate ()
+    {
         return [
-            ['1234', [], 'a-path', 's--oBZFrWXN--'],
-         ];
-}
+            ['1234', [], 'a-path', 's--a01645ad--']
+        ];
+    }
 }

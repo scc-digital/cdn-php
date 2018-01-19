@@ -21,9 +21,14 @@
 			"Scc\\Cdn\\": "src/"
 		}
 	},
-        "extra": {
-            "branch-alias": {
-                "dev-master": "1.0-dev"
-            }
-        }
+	"autoload-dev": {
+		"psr-4": {
+			"Scc\\Cdn\\Tests\\": "Tests/"
+		}
+	},
+	"extra": {
+		"branch-alias": {
+			"dev-master": "1.0-dev"
+		}
+	}
 }

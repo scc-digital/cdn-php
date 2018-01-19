@@ -12,9 +12,9 @@
 namespace Scc\Cdn\Exception;
 
 /**
- * Class InvalidOptionException
+ * Class MissingOptionException
  *
- * Thrown when an invalid option is given to the
+ * Thrown when an invalid option is given to the system
  *
  * @author Jason Benedetti <jason.benedetti@sccd.lu>
  */
