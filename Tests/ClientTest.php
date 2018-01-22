@@ -94,7 +94,8 @@ class ClientTest extends \PHPUnit_Framework_TestCase
             ['test', 'test/path', 'upload', 'test_string'],
             ['test', 'test/path', 'upload', ''],
             ['test', 'https://cms.sccd.dev/assets/logo/EVRY2.png', 'remote', ''],
-            ['test', 'https://cms.sccd.dev/assets/logo/EVRY2.png', 'remote', 'test_string']
+            ['test', 'https://cms.sccd.dev/assets/logo/EVRY2.png', 'remote', 'test_string'],
+            ['', '', '', ''],
         ];
     }
 
@@ -110,6 +111,13 @@ class ClientTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetUrl($resourceType, $path, $type, $stringified)
     {
+        if (empty($path)) {
+            $result = $this->instance->getUrl($path, ['resource_type' => $resourceType]);
+
+            $this->assertEmpty($result);
+            return;
+        }
+
         $mockTransformationManager = $this->getMockBuilder(TransformationManager::class)
             ->getMock();
 
