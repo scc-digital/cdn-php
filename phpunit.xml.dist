@@ -25,6 +25,9 @@
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
             <directory>./src</directory>
+            <exclude>
+                <directory>./Tests</directory>
+            </exclude>
         </whitelist>
     </filter>
 
