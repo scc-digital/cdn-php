@@ -10,6 +10,7 @@
  */
 
 namespace Scc\Cdn\Tests\Transformation\Type;
+use Scc\Cdn\Tests\Helper\Traits\ReflectionTrait;
 use Scc\Cdn\Transformation\Exception\UndefinedException;
 use Scc\Cdn\Transformation\TransformationInterface;
 
@@ -22,30 +23,7 @@ use Scc\Cdn\Transformation\TransformationInterface;
  */
 class TypeTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * Return the class which implements the TransformationInterface
-     *
-     * @return array
-     */
-    protected function getInstanceOfTypes()
-    {
-        $classes = get_declared_classes();
-        $transformations = array();
-
-        foreach($classes as $class) {
-            $reflect = new \ReflectionClass($class);
-
-            if($reflect->implementsInterface(TransformationInterface::class) && !$reflect->isAbstract()) {
-                if (strpos($class, 'Mock') !== false) {
-                    continue;
-                }
-
-                $transformations[] = $class;
-            }
-        }
-
-        return $transformations;
-    }
+    use ReflectionTrait;
 
     /**
      * Test the transformation types
@@ -54,7 +32,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
     {
         $definedValues = ['names' => [], 'aliases' => []];
 
-        foreach ($this->getInstanceOfTypes() as $className) {
+        foreach ($this->getInstanceOfTypes(TransformationInterface::class) as $className) {
             /** @var TransformationInterface $class */
             $class = new $className();
 

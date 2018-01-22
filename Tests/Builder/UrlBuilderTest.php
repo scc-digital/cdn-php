@@ -11,6 +11,8 @@
 
 namespace Scc\Cdn\Builder;
 
+use Scc\Cdn\Tests\Helper\Traits\ReflectionTrait;
+
 /**
  * Class UrlBuilderTest
  *
@@ -20,6 +22,8 @@ namespace Scc\Cdn\Builder;
  */
 class UrlBuilderTest extends \PHPUnit_Framework_TestCase
 {
+    use ReflectionTrait;
+
     const PATH = 'my/path/to/test';
 
     /**
@@ -54,42 +58,6 @@ class UrlBuilderTest extends \PHPUnit_Framework_TestCase
             [['part1', 'part2'], ''],
             [['part1', 'part2'], \RuntimeException::class],
         ];
-    }
-
-    /**
-     * Property caller.
-     *
-     * @param mixed  $object
-     * @param string $name
-     * @param array  $value
-     *
-     * @return \ReflectionProperty
-     */
-    protected static function setProperty($object, string $name, $value)
-    {
-        $class = new \ReflectionClass($object);
-        $property = $class->getProperty($name);
-        $property->setAccessible(true);
-        $property->setValue($object, $value);
-
-        return $property;
-    }
-
-    /**
-     * Property getter.
-     *
-     * @param mixed  $object
-     * @param string $name
-     *
-     * @return mixed
-     */
-    protected static function getProperty($object, string $name)
-    {
-        $class = new \ReflectionClass($object);
-        $property = $class->getProperty($name);
-        $property->setAccessible(true);
-
-        return $property->getValue($object);
     }
 
     /**

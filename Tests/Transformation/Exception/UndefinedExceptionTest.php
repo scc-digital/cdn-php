@@ -10,8 +10,8 @@
  */
 
 namespace Scc\Cdn\Tests\Transformation\Exception;
+use Scc\Cdn\Tests\Helper\Traits\ReflectionTrait;
 use Scc\Cdn\Transformation\Exception\UndefinedException;
-use Scc\Cdn\Transformation\TransformationInterface;
 use Scc\Cdn\Transformation\Type\Width;
 
 /**
@@ -23,22 +23,7 @@ use Scc\Cdn\Transformation\Type\Width;
  */
 class UndefinedExceptionTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * Property getter.
-     *
-     * @param mixed  $object
-     * @param string $name
-     *
-     * @return mixed
-     */
-    protected static function getProperty($object, string $name)
-    {
-        $class = new \ReflectionClass($object);
-        $property = $class->getProperty($name);
-        $property->setAccessible(true);
-
-        return $property->getValue($object);
-    }
+    use ReflectionTrait;
 
     /**
      * Provide tests for the whole class

@@ -11,6 +11,7 @@
 
 namespace Scc\Cdn\Tests\Transformation;
 
+use Scc\Cdn\Tests\Helper\Traits\ReflectionTrait;
 use Scc\Cdn\Transformation\Exception\UnsupportedException;
 use Scc\Cdn\Transformation\TransformationInterface;
 use Scc\Cdn\Transformation\TransformationPool;
@@ -26,6 +27,8 @@ use Scc\Cdn\Transformation\Type\Width;
  */
 class TransformationPoolTest extends \PHPUnit_Framework_TestCase
 {
+    use ReflectionTrait;
+
     /**
      * @var TransformationPool
      */
@@ -37,42 +40,6 @@ class TransformationPoolTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->instance = new TransformationPool();
-    }
-
-    /**
-     * Property caller.
-     *
-     * @param mixed  $object
-     * @param string $name
-     * @param mixed  $value
-     *
-     * @return \ReflectionProperty
-     */
-    protected static function setProperty($object, string $name, $value)
-    {
-        $class = new \ReflectionClass($object);
-        $property = $class->getProperty($name);
-        $property->setAccessible(true);
-        $property->setValue($object, $value);
-
-        return $property;
-    }
-
-    /**
-     * Property getter.
-     *
-     * @param mixed  $object
-     * @param string $name
-     *
-     * @return mixed
-     */
-    protected static function getProperty($object, string $name)
-    {
-        $class = new \ReflectionClass($object);
-        $property = $class->getProperty($name);
-        $property->setAccessible(true);
-
-        return $property->getValue($object);
     }
 
     /**

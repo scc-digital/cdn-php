@@ -13,6 +13,7 @@ namespace Scc\Cdn\Tests;
 
 use Scc\Cdn\Client;
 use Scc\Cdn\Sign;
+use Scc\Cdn\Tests\Helper\Traits\ReflectionTrait;
 use Scc\Cdn\Transformation\TransformationManager;
 
 /**
@@ -24,6 +25,8 @@ use Scc\Cdn\Transformation\TransformationManager;
  */
 class ClientTest extends \PHPUnit_Framework_TestCase
 {
+    use ReflectionTrait;
+
     /**
      * @var Client
      */
@@ -35,42 +38,6 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->instance = new Client('api_secret_value', 'my/base/url');
-    }
-
-    /**
-     * Property caller.
-     *
-     * @param mixed  $object
-     * @param string $name
-     * @param mixed  $value
-     *
-     * @return \ReflectionProperty
-     */
-    protected static function setProperty($object, string $name, $value)
-    {
-        $class = new \ReflectionClass($object);
-        $property = $class->getProperty($name);
-        $property->setAccessible(true);
-        $property->setValue($object, $value);
-
-        return $property;
-    }
-
-    /**
-     * Property getter.
-     *
-     * @param mixed  $object
-     * @param string $name
-     *
-     * @return mixed
-     */
-    protected static function getProperty($object, string $name)
-    {
-        $class = new \ReflectionClass($object);
-        $property = $class->getProperty($name);
-        $property->setAccessible(true);
-
-        return $property->getValue($object);
     }
 
     /**
@@ -163,11 +130,8 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         if (!empty($stringified)) {
             $sign = (new Sign('api_secret_value'))->generate($stringified, $path);
 
-            $reflectedInstance = new \ReflectionClass($this->instance);
-            $reflectedMethod = $reflectedInstance->getMethod('buildPath');
-            $reflectedMethod->setAccessible(true);
-
-            $builtPath = $reflectedMethod->invokeArgs($this->instance, [$path, $type]);
+            $builtPath = $this->getReflectedMethod($this->instance, 'buildPath')
+                ->invokeArgs($this->instance, [$path, $type]);
 
             $expectedPath = sprintf('%s/%s/%s/%s/%s/%s', 'my/base/url', $resourceType, $type, $sign, $stringified, $builtPath);
         } else {
@@ -187,11 +151,8 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     {
         $path1 = 'https://cms.sccd.dev/assets/logo/EVRY2.png';
 
-        $reflectedInstance = new \ReflectionClass($this->instance);
-        $reflectedMethod = $reflectedInstance->getMethod('guessPathExtension');
-        $reflectedMethod->setAccessible(true);
-
-        $extension = $reflectedMethod->invokeArgs($this->instance, [$path1]);
+        $extension = $this->getReflectedMethod($this->instance, 'guessPathExtension')
+            ->invokeArgs($this->instance, [$path1]);
 
         $this->assertEquals('png', $extension);
     }
@@ -220,10 +181,9 @@ class ClientTest extends \PHPUnit_Framework_TestCase
      */
     public function testBuildPath($path, $type, $expectedResult)
     {
-        $reflectedInstance = new \ReflectionClass($this->instance);
-        $reflectedMethod = $reflectedInstance->getMethod('buildPath');
-        $reflectedMethod->setAccessible(true);
-
-        $this->assertSame($expectedResult, $reflectedMethod->invokeArgs($this->instance, [$path, $type]));
+        $this->assertSame(
+            $expectedResult,
+            $this->getReflectedMethod($this->instance, 'buildPath')->invokeArgs($this->instance, [$path, $type])
+        );
     }
 }

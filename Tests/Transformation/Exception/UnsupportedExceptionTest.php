@@ -11,6 +11,7 @@
 
 namespace Scc\Cdn\Tests\Transformation\Exception;
 
+use Scc\Cdn\Tests\Helper\Traits\ReflectionTrait;
 use Scc\Cdn\Transformation\Exception\UnsupportedException;
 
 /**
@@ -22,22 +23,7 @@ use Scc\Cdn\Transformation\Exception\UnsupportedException;
  */
 class UnsupportedExceptionTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * Property getter.
-     *
-     * @param mixed  $object
-     * @param string $name
-     *
-     * @return mixed
-     */
-    protected static function getProperty($object, string $name)
-    {
-        $class = new \ReflectionClass($object);
-        $property = $class->getProperty($name);
-        $property->setAccessible(true);
-
-        return $property->getValue($object);
-    }
+    use ReflectionTrait;
 
     /**
      * Provide tests for the whole class

@@ -10,6 +10,7 @@
  */
 
 namespace Scc\Cdn\Decorator;
+use Scc\Cdn\Tests\Helper\Traits\ReflectionTrait;
 
 /**
  * Class HTMLDecoratorTest
@@ -20,31 +21,14 @@ namespace Scc\Cdn\Decorator;
  */
 class HTMLDecoratorTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $mockedInstance;
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function setUp()
-    {
-
-    }
+    use ReflectionTrait;
 
     /**
      * Test the HTMLDecorator::__construct method
      */
     public function testConstruct()
     {
-        $instance = new HTMLDecorator('my/url');
-
-        $reflectedClass = new \ReflectionClass($instance);
-        $reflectedProperty = $reflectedClass->getProperty('url');
-        $reflectedProperty->setAccessible('true');
-
-        $this->assertSame('my/url', $reflectedProperty->getValue($instance));
+        $this->assertSame('my/url', $this->getProperty(new HTMLDecorator('my/url'), 'url'));
     }
 
     /**
@@ -82,9 +66,7 @@ class HTMLDecoratorTest extends \PHPUnit_Framework_TestCase
     public function testGetHTMLContent($resourceType, $expectedReturn)
     {
         $instance = new HTMLDecorator('my/url');
-        $reflectedInstance = new \ReflectionClass($instance);
-        $method = $reflectedInstance->getMethod('getHTMLContent');
-        $method->setAccessible(true);
+        $method = $this->getReflectedMethod($instance, 'getHTMLContent');
 
         $result = $method->invokeArgs($instance, [$resourceType]);
 
@@ -108,9 +90,7 @@ class HTMLDecoratorTest extends \PHPUnit_Framework_TestCase
     public function testGetHTMLAttributes(array $options, $expectedResult)
     {
         $instance = new HTMLDecorator('my/url');
-        $reflectedInstance = new \ReflectionClass($instance);
-        $method = $reflectedInstance->getMethod('getHTMLAttributes');
-        $method->setAccessible(true);
+        $method = $this->getReflectedMethod($instance, 'getHTMLAttributes');
 
         $result = $method->invokeArgs($instance, [$options]);
 
