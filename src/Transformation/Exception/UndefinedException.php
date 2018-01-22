@@ -34,12 +34,7 @@ class UndefinedException extends \LogicException
      */
     public function __construct(TransformationInterface $transformation)
     {
-        parent::__construct(sprintf(
-            'The transformation have no name',
-            $transformation->getName(),
-            $transformation->getAlias()
-        ));
-
+        parent::__construct('The transformation have no name');
         $this->transformation = $transformation;
     }
 
