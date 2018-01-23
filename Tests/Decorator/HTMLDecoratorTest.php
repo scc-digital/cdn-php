@@ -110,6 +110,7 @@ class HTMLDecoratorTest extends \PHPUnit_Framework_TestCase
             [['resource_type' => 'image'], ''],
             [['resource_type' => 'image', 'sign_url' => true, 'secure' => true], ''],
             [['resource_type' => 'image', 'class' => 'sample'], 'class="sample"'],
+            [['html_height' => '50', 'html_width' => '50'], 'height="50" width="50"'],
         ];
     }
 

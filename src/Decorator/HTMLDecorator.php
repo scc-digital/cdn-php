@@ -28,6 +28,16 @@ class HTMLDecorator
     protected $url;
 
     /**
+     * Defines some attributes alias to rewrite before decorate
+     *
+     * @var array
+     */
+    protected static $attributesAlias = [
+        'html_width' => 'width',
+        'html_height' => 'height',
+    ];
+
+    /**
      * Build an instance of HTMLDecorator.
      *
      * @param string $url
@@ -66,6 +76,10 @@ class HTMLDecorator
 
         $attributes = [];
         foreach ($options as $optionName => $optionValue) {
+            if (array_key_exists($optionName, self::$attributesAlias)) {
+                $optionName = self::$attributesAlias[$optionName];
+            }
+
             $attributes[] = sprintf('%s="%s"', $optionName, $optionValue);
         }
 
