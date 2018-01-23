@@ -99,6 +99,7 @@ class TransformationManager
     {
         $this->validate($resourceType);
         $this->initPool();
+        $this->attributes = [];
 
         foreach ($options as $key => $value) {
             $className = 'Scc\\Cdn\\Transformation\\Type\\' . $this->dashesToCamelCase($key);

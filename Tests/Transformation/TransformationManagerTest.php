@@ -186,6 +186,7 @@ class TransformationManagerTest extends \PHPUnit_Framework_TestCase
             return;
         }
 
+        $this->assertSame([], $this->getProperty($this->instance, 'attributes'));
         $this->assertSame($this->instance, $this->instance->resolveTransformations($resourceType, $options));
 
         /** @var TransformationPool $pool */
