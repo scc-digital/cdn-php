@@ -194,4 +194,12 @@ class ClientTest extends \PHPUnit_Framework_TestCase
             $this->getReflectedMethod($this->instance, 'buildPath')->invokeArgs($this->instance, [$path, $type])
         );
     }
+
+    /**
+     * Test the Client::getBaseUrl method
+     */
+    public function testGetBaseUrl()
+    {
+        $this->assertSame('my/base/url', $this->instance->getBaseUrl());
+    }
 }

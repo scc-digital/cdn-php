@@ -91,6 +91,16 @@ class Client
     }
 
     /**
+     * Return the base url
+     *
+     * @return string
+     */
+    public function getBaseUrl()
+    {
+        return $this->baseUrl;
+    }
+
+    /**
      * Get the resource url
      *
      * @param string $path
